@@ -1,4 +1,4 @@
-
+#!/usr/bin/bash
 # Bash code for printing name
 NAME="Suchitra"
 SURNAME="Thapa"
