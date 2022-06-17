@@ -81,6 +81,20 @@ bwa mem -R '@RG\tID:231335\tSM:Normal' hg19.chr5_12_17.fa trimmed_reads/SLGFSK-N
 bwa mem -R '@RG\tID:231336\tSM:Tumor' hg19.chr5_12_17.fa trimmed_reads/SLGFSK-T_231336_r1_paired.fq.gz \
         trimmed_reads/SLGFSK-T_231336_r2_paired.fq.gz > Mapping/SLGFSK-T_231336.sam
         
+# changing SAM file to BAM file 
+# sorting and indexing the sorted BAM file 
+
+for sample in `cat list.txt`
+do
+samtools view -@ 20 -S -b Mapping/${sample}.sam | samtools sort -@ 32 > Mapping/${sample}.sorted.bam
+samtools index Mapping/${sample}.sorted.bam
+done
+
+# Filtering the mapped files
+for sample in `cat list.txt`
+do
+samtools view -q 1 -f 0x2 -F 0x8 -b Mapping/${sample}.sorted.bam > Mapping/${sample}.filtered1.bam
+done
         
         
         
