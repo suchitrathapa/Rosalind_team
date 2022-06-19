@@ -96,7 +96,28 @@ do
 samtools view -q 1 -f 0x2 -F 0x8 -b Mapping/${sample}.sorted.bam > Mapping/${sample}.filtered1.bam
 done
         
-        
+samtools flagstat SLGFSK-T_231336.filtered1.bam
+
+samtools flagstat SLGFSK-N_231335.filtered1.bam
+
+for sample in `cat list.txt`
+do
+samtools collate Mapping/${sample}.filtered1.bam Mapping/${sample}.namecollate.bam
+samtools fixmate -m Mapping/${sample}.namecollate.bam Mapping/${sample}.fixmate.bam
+samtools sort -@ 32 -o Mapping/${sample}.positionsort.bam Mapping/${sample}.fixmate.bam
+samtools markdup -@32 -r Mapping/${sample}.positionsort.bam Mapping/${sample}.clean.bam
+done
+
+for sample in `cat list.txt`
+do
+samtools rmdup Mapping/${sample}.sorted.bam Mapping/${sample}.rdup
+done
+
+for sample in `cat list.txt`
+do      
+cat Mapping/${sample}.clean.bam  | bamleftalign -f hg19.chr5_12_17.fa -m 5 -c > Mapping/${sample}.leftAlign.bam
+done
+
         
         
         
