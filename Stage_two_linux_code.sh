@@ -118,7 +118,43 @@ do
 cat Mapping/${sample}.clean.bam  | bamleftalign -f hg19.chr5_12_17.fa -m 5 -c > Mapping/${sample}.leftAlign.bam
 done
 
+  #Recalibrate read mapping qualities
+
+for sample in `cat list.txt`
+do
+samtools calmd -@ 32 -b hg19.chr5_12_17.fa Mapping/${sample}.leftAlign.bam > Mapping/${sample}.recalibrate.bam
+done
+
+for sample in `cat list.txt`
+do
+bamtools filter -in Mapping${sample}.recalibrate.bam -mapQuality "<=254" > Mapping/${sample}.refilter.bam
+done
+
+wget https://sourceforge.net/projects/varscan/files/VarScan.v2.3.9.jar	   
         
+mkdir Variants       
         
-        
-        
+for sample in `cat list.txt`
+do
+samtools mpileup -f hg19.chr5_12_17.fa Mapping/${sample}.refilter.bam --min-MQ 1 --min-BQ 28 \ > Variants/${sample}.pileup
+done
+
+java -jar VarScan.v2.3.9.jar somatic Variants/SLGFSK-N_231335.pileup \
+
+        Variants/SLGFSK-T_231336.pileup Variants/SLGFSK \
+
+        --normal-purity 1  --tumor-purity 0.5 --output-vcf 1 
+
+
+bgzip Variants/SLGFSK.snp.vcf > Variants/SLGFSK.snp.vcf.gz
+
+bgzip Variants/SLGFSK.indel.vcf > Variants/SLGFSK.indel.vcf.gz
+
+tabix Variants/SLGFSK.snp.vcf.gz
+
+tabix Variants/SLGFSK.indel.vcf.gz
+
+bcftools merge Variants/SLGFSK.snp.vcf.gz Variants/SLGFSK.indel.vcf.gz > Variants/SLGFSK.vcf
+
+wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
+unzip snpEff_latest_core.zip
