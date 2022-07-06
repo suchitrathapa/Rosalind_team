@@ -1,0 +1,25 @@
+data files used:
+
+PRJNA557416 | SAMN12414410 | SRX6626021 | SRR9873306 | 562 | Escherichia coli	| 210,908,100	| USA	| 
+62.8 MB | ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR987/006/SRR9873306/SRR9873306_1.fastq.gz
+68.0 MB |	ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR987/006/SRR9873306/SRR9873306_2.fastq.gz
+
+Code used:
+
+mkdir reads
+cd reads
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR987/006/SRR9873306/SRR9873306_1.fastq.gz
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR987/006/SRR9873306/SRR9873306_2.fastq.gz
+cd ..
+
+mkdir fastqc_results
+
+fastqc reads/*.fastq.gz –o fastqc_results
+
+mkdir multiqc_results
+multiqc fastqc_results –o multiqc_results
+
+mkdir trimmed_reads
+fastp -i "reads/SRR9873306_1.fastq.gz" -I "reads/SRR9873306_2.fastq.gz" -o "trimmed_reads/SRR9873306.trimmed_1.fastq.gz" -O "trimmed_reads/SRR9873306.trimmed_2.fastq.gz" -h "trimmed_reads/trimmed_reads.fastp.html"
+
+spades.py -1 "trimmed_reads/SRR9873306.trimmed_1.fastq.gz" -2 "trimmed_reads/SRR9873306.trimmed_2.fastq.gz" --careful --cov-cutoff auto -o spades_report
