@@ -12,8 +12,8 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR141/021/SRR14160921/SRR14160921_1.fas
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR141/021/SRR14160921/SRR14160921_2.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR178/094/SRR17859194/SRR17859194_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR178/094/SRR17859194/SRR17859194_2.fastq.gz
-wget
-wget
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR132/052/SRR13220452/SRR13220452_1.fastq.gz
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR132/052/SRR13220452/SRR13220452_2.fastq.gz
 
 cd ..
 
@@ -22,6 +22,7 @@ SRR9873306
 SRR13342195
 SRR14160921
 SRR17859194
+SRR13220452
 
 CTRL + D
 
