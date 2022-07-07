@@ -30,10 +30,7 @@ CTRL + D
 
 mkdir -p fastqc_results 
 
-for sample in `cat list.txt`
-do
-  fastqc reads/${sample}*.fastq.gz -o fastqc_results
-done
+fastqc reads/*.fastq.gz -o fastqc_results
 
 multiqc fastqc_results -o multiqc_results
 
@@ -55,5 +52,5 @@ done
 
 For sample in `cat list.txt`
 do
-spades.py -1 "reads/${sample}_1.fastq.gz" -2 "reads/${sample}_2.fastq.gz" --careful --cov-cutoff auto -o spades_report
+spades.py -1 "trimmed_reads/${sample}.trimmed_1.fastq.gz" -2 "trimmed_reads/${sample}.trimmed_2.fastq.gz" --careful --cov-cutoff auto -o spades_report
 done
